@@ -25,22 +25,36 @@
 
             <div class="card" style="padding: 15px">
                 <div class="row">
-                    <div class="expressao col-md-12">
-
+                    <div class="col-md-6">
+                        <input v-model="valor" placeholder="Ordem do Sistema" />
                     </div>
                 </div>
 
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <table style="width: 50% ">
+                            <tr v-for="linha in matriz">
+                                <td v-for="coluna in linha">
+                                    <input v-model="coluna" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
                 <div class="row">
                     <!-- <div class="col-md-6 epsilon">
-                        E = 10 <sup><input v-model="epsilon" type="number"></sup>
-                    </div> -->
-                    <div class="col-md-6">
+                                E = 10 <sup><input v-model="epsilon" type="number"></sup>
+                            </div> -->
+                    <div class="col-md-12">
                         <div style="text-align: end">
                             <button @click="calcular" class="btn btn-primary">Calcular</button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -49,8 +63,23 @@
         const app = new Vue({
             el: '#app',
             data: {
+                matriz: [[1, 2, 3], [1, 2, 3], [1, 2, 3]],
+                valor: '',
+
             },
-            methods: {},
+            methods: {
+                buildMatriz(n) {
+                    return new Array(n).fill(0).map(() => {
+                        const result = {};
+
+                        (new Array(n).fill(0)).map((x, i) => {
+                            result[i] = '';
+                        });
+
+                        return result;
+                    });
+                }
+            },
         });
     </script>
 </body>
