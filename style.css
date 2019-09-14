@@ -1,0 +1,30 @@
+/* body {
+    font-family: 'Roboto', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+} */
+
+#app {
+    width: 90%;
+    margin: auto;
+    font-size: 1.1em;
+}
+
+#app table {
+    width: 90%;
+    margin: auto;
+    font-size: 1em;
+}
+
+.expressao input {
+    width: 35px;
+    margin-left: 7px;
+    margin-bottom: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.epsilon input {
+    width: 60px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
