@@ -9,15 +9,10 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 </head>
-
 <body>
     <div id="app">
-
         <div class="container-fluid">
-
-
             <div class="row">
                 <h1 class="display-4">Gauss</h1>
             </div>
@@ -25,8 +20,14 @@
 
             <div class="card" style="padding: 15px">
                 <div class="row">
-                    <div class="col-md-6">
-                        <input v-model="valor" placeholder="Ordem do Sistema" />
+                    <div class="col-md-2">
+                        <h4>Ordem do sistema</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <input v-model="valor" style="width: 60px" type="number" max="10" min="3"/>
+                    </div>
+                    <div class="col-md-3">
+                        <button @click="matriz = buildMatriz(valor)" class="btn btn-primary">Calcular</button>
                     </div>
                 </div>
 
@@ -34,19 +35,18 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <table style="width: 50% ">
+                        <h3>Matriz</h3>
+
+                        <table style="width: 50%; margin: 0%">
                             <tr v-for="linha in matriz">
-                                <td v-for="coluna in linha">
-                                    <input v-model="coluna" />
+                                <td v-for="coluna in linha.items">
+                                    <input v-model="coluna.value" style="width: 60px" />
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div class="row">
-                    <!-- <div class="col-md-6 epsilon">
-                                E = 10 <sup><input v-model="epsilon" type="number"></sup>
-                            </div> -->
                     <div class="col-md-12">
                         <div style="text-align: end">
                             <button @click="calcular" class="btn btn-primary">Calcular</button>
@@ -63,22 +63,29 @@
         const app = new Vue({
             el: '#app',
             data: {
-                matriz: [[1, 2, 3], [1, 2, 3], [1, 2, 3]],
+                matriz: [],
                 valor: '',
 
             },
+            created() {
+                this.matriz = this.buildMatriz(10);
+            },
             methods: {
                 buildMatriz(n) {
+                    n = Number(n);
+
+                    if (n > 10 || n < 2) {
+                        return [];
+                    }
+
                     return new Array(n).fill(0).map(() => {
-                        const result = {};
-
-                        (new Array(n).fill(0)).map((x, i) => {
-                            result[i] = '';
+                        const items = new Array(n).fill(0).map(() => {
+                            return { value: '' };
                         });
-
-                        return result;
+                        return { items };
                     });
-                }
+                },
+                calcular() { }
             },
         });
     </script>
