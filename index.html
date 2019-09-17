@@ -85,7 +85,20 @@
                         return { items };
                     });
                 },
-                calcular() { }
+
+                calcular() {
+                    for(let i = 0; i < this.matriz.length; i++) {
+                        for(let j = 0; j < this.matriz.length; j++) {
+                            
+                            if (i == j) {
+                                let pivo = this.matriz[i].items[j];
+
+                                console.log(JSON.stringify(pivo));
+                                console.log(JSON.stringify(this.matriz[i+1] && this.matriz[i+1].items));
+                            }
+                        }
+                    }
+                }
             },
         });
     </script>
