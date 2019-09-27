@@ -108,7 +108,7 @@
                 v-for="valor in resultado.valorX"
                 style="display: inline-block; width: 80px;"
               >
-                <input :value="Number(valor) && !isFinite(Number(valor)) ? Number(valor) : ''" disabled />
+                <input :value="Number(valor) && isFinite(Number(valor)) ? Number(valor) : ''" disabled />
               </div>
             </div>
           </div>

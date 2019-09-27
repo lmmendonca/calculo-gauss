@@ -23,7 +23,7 @@ function calcularGauss(matriz, x, y, etapas = []) {
     JSON.parse(JSON.stringify(matriz))
   );
 
-  if (!isEscalonado(matriz)) {
+  if (!isEscalonado(matriz) && matriz[(x + 1)]) {
     matriz = calcularGauss(matriz, (x + 1), (y + 1), etapas);
     return matriz;
   }
