@@ -9,22 +9,11 @@
 }
 
 #app table {
-    width: 90%;
     margin: auto;
     font-size: 1em;
 }
 
-.expressao input {
-    width: 35px;
-    margin-left: 7px;
-    margin-bottom: 30px;
-    height: 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.epsilon input {
+#app input {
     width: 60px;
-    margin-left: 5px;
-    margin-bottom: 10px;
+    height: 40px;
 }

@@ -20,55 +20,95 @@
     <div id="app">
       <div class="container-fluid">
         <div class="row">
-          <h1 class="display-4">Gauss</h1>
+          <h1 class="display-4" style="font-size: 2.3em; margin-top: 20px">
+            Eliminação de Gauss
+          </h1>
         </div>
         <br />
 
         <div class="card" style="padding: 15px">
           <div class="row">
-            <div class="col-md-2">
-              <h4>Ordem do sistema</h4>
-            </div>
             <div class="col-md-3">
+              <h4>Ordem do sistema</h4>
               <input
-                v-model="valor"
-                style="width: 60px"
+                v-model="ordem"
+                style="width: 70px;"
                 type="number"
                 max="10"
                 min="3"
+                @blur="resetMatriz()"
               />
             </div>
-            <div class="col-md-3">
-              <button
-                @click="matriz = buildMatriz(valor)"
-                class="btn btn-primary"
-              >
-                Calcular
-              </button>
-            </div>
           </div>
-
           <br />
 
           <div class="row">
-            <div class="col-md-6">
-              <h3>Matriz</h3>
-
-              <table style="width: 50%; margin: 0%">
+            <div class="col-md-12">
+              <h4>Matriz</h4>
+              <table style="margin: 0%">
                 <tr v-for="linha in matriz">
-                  <td v-for="coluna in linha.items">
-                    <input v-model="coluna.value" style="width: 60px" />
+                  <td
+                    v-for="(coluna, index) in linha.items"
+                    style="width: 80px; height: 50px;"
+                  >
+                    <div v-if="index == linha.items.length - 1">
+                      <input v-model="coluna.value" style="margin-left: 35px" />
+                    </div>
+                    <div v-else style="width: 50px;">
+                      <input v-model="coluna.value" />
+                    </div>
                   </td>
                 </tr>
               </table>
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-12">
               <div style="text-align: end">
                 <button @click="calcular" class="btn btn-primary">
                   Calcular
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card"
+          style="padding: 15px; margin-top: 40px; margin-bottom: 20px"
+          v-if="resultado && resultado.etapas && resultado.etapas.length"
+        >
+          <div class="row" >
+            <div class="col-md-12">
+              <h4>Etapas</h4>
+              <table
+                style="margin: 0px 0px 30px 0px"
+                v-for="etapa in resultado.etapas"
+              >
+                <tr v-for="linha in etapa">
+                  <td
+                    v-for="(coluna, index) in linha"
+                    style="width: 80px; height: 50px;"
+                  >
+                    <div v-if="index == linha.length - 1">
+                      <input
+                        :value="coluna"
+                        style="margin-left: 35px"
+                        disabled
+                      />
+                    </div>
+                    <div v-else style="width: 50px;">
+                      <input :value="coluna" disabled />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-12">
+              <h4>Resultado</h4>
+              <div
+                v-for="valor in resultado.valorX"
+                style="display: inline-block; width: 80px;"
+              >
+                <input :value="Number(valor) && !isFinite(Number(valor)) ? Number(valor) : ''" disabled />
               </div>
             </div>
           </div>
@@ -83,13 +123,14 @@
         el: '#app',
         data: {
           matriz: [],
-          valor: ''
+          ordem: 3,
+          resultado: null,
         },
         created() {
-          this.matriz = this.buildMatriz(5);
+          this.matriz = this.buildMatriz(this.ordem);
         },
         methods: {
-          buildMatriz(n) {
+          buildMatriz(n = 3) {
             n = Number(n);
 
             if (n > 10 || n < 2) {
@@ -97,28 +138,31 @@
             }
 
             return new Array(n).fill(0).map(() => {
-              const items = new Array(n).fill(0).map(() => {
+              const items = new Array(n + 1).fill(0).map(() => {
                 return { value: '' };
               });
               return { items };
             });
+            1;
+          },
+
+          resetMatriz() {
+            this.matriz = this.buildMatriz(this.ordem);
+            this.resultado = null;
           },
 
           calcular() {
-            for (let i = 0; i < this.matriz.length; i++) {
-              for (let j = 0; j < this.matriz.length; j++) {
-                if (i == j) {
-                  let pivo = this.matriz[i].items[j];
+            const matriz = [[]];
 
-                  console.log(JSON.stringify(pivo));
-                  console.log(
-                    JSON.stringify(
-                      this.matriz[i + 1] && this.matriz[i + 1].items
-                    )
-                  );
-                }
+            for (let i = 0; i < this.matriz.length; i++) {
+              matriz[i] = [];
+
+              for (let j = 0; j < this.matriz.length + 1; j++) {
+                matriz[i][j] = Number(this.matriz[i].items[j].value) || 0;
               }
             }
+
+            this.resultado = calcularGauss(matriz, 0, 0);
           }
         }
       });
