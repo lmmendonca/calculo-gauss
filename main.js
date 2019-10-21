@@ -1,9 +1,11 @@
 
-function calcularGauss(matriz, x, y, etapas = []) {
+function calcularGauss(matriz, x, y, etapas = [], fatoracao = {}) {
+  if (!etapas.length) {
+    fatoracao = {L: [[1,0,0,0],[0,1,0,0],[0,0,1,0]], U:[] }
+  }
+
   // Verifica se o pivo é zero
   if (matriz[x][y] === 0) {
-    console.log('Pivo zero', x, y);
-
     for (let i = (x + 1); i < matriz.length; i++) {
       if (matriz[i][y] === 0 && i === x) {
         continue;
@@ -16,7 +18,7 @@ function calcularGauss(matriz, x, y, etapas = []) {
 
   if (matriz[x][y] !== 0) {
     console.log('Pivo', x, y);
-    matriz = calcularPivo(matriz, x, y);
+    matriz = calcularPivo(matriz, x, y, fatoracao);
   }
 
   etapas.push(
@@ -24,19 +26,22 @@ function calcularGauss(matriz, x, y, etapas = []) {
   );
 
   if (!isEscalonado(matriz) && matriz[(x + 1)]) {
-    matriz = calcularGauss(matriz, (x + 1), (y + 1), etapas);
+    matriz = calcularGauss(matriz, (x + 1), (y + 1), etapas, fatoracao);
     return matriz;
   }
+
+  fatoracao.U = etapas[etapas.length-1];
 
   return {
     matriz,
     valorX: calcularX(JSON.parse(JSON.stringify(matriz))),
     etapas,
+    fatoracao,
   };
 }
 
 
-function calcularPivo(matriz, x, y) {
+function calcularPivo(matriz, x, y, fatoracao) {
   // verificar se é a última linha
   if (x !== matriz.length - 1) {
     let valorA = matriz[x][y];
@@ -47,6 +52,9 @@ function calcularPivo(matriz, x, y) {
       if (valorB === 0) {
         continue;
       }
+
+      console.log({ coluna: y, linha: i, valor: Math.abs(valorB) });
+      fatoracao.L[i][y] = Math.abs(valorB);
 
       matriz[i] = somarArrays(
         matriz[i],
@@ -152,10 +160,17 @@ function calcularX(matriz) {
   return resultado;
 }
 
+// let teste = [
+//   [3, 2, 4, 1],
+//   [1, 1, 2, 2],
+//   [4, 3, -2, 3]
+// ];
+
 let teste = [
-  [1, 1, 1, 6],
-  [2, 1, 2, 10],
-  [1, 2, 3, 14]
+  [1, 1, 1, 0],
+  [2, 1, -1, 0],
+  [3, 2, 0, 0]
 ];
-let resultado = calcularGauss(teste, 0, 0);
-console.log(JSON.stringify(resultado));
+
+ let resultado = calcularGauss(teste, 0, 0);
+ console.log(JSON.stringify(resultado, null, 2));
